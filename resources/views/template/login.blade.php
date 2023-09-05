@@ -16,7 +16,7 @@
     </form>
 @endsection
 
-@section('toastify')
+@section('js')
     @if (session('error'))
         <script>
             Toastify({

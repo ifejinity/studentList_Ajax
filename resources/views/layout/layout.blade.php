@@ -13,10 +13,12 @@
     @yield('loginForm')
 
     {{-- home --}}
-    @yield('studentList')
+    @yield('header')
     
+    {{-- sweetalert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     {{-- toastify js --}}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    @yield('toastify')
+    @yield('js')
 </body>
 </html>

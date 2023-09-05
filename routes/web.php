@@ -14,11 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-// log in route
-Route::prefix('/login')->middleware(['guest'])->group(function() {
-    Route::view('/', 'template.login')->name('login');
-    Route::post('/process', 'StudentController@loginProcess')->name('login.process');
+// user route
+Route::prefix('/user')->group(function() {
+    Route::view('/', 'template.login')->name('login')->middleware(['guest']);
+    Route::post('/login', 'UserController@loginProcess')->name('login.process');
+    Route::get('/logout', 'UserController@logoutProcess')->name('logout.process');
 });
 // student route
 Route::prefix('/student')->middleware(['auth'])->group(function() {
