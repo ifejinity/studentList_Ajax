@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
-
+    // list student
     public function index() {
         $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->get();
         $myArray = [];
@@ -19,7 +19,7 @@ class StudentController extends Controller
         }
         return view('template.home', compact('myArray'));
     }
-
+    // create new student
     public function create(Request $request) {
         // validate inputs
         $validated = Validator::make($request->all(), [
