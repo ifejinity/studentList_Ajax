@@ -22,5 +22,7 @@ Route::prefix('/user')->group(function() {
 });
 // student route
 Route::prefix('/student')->middleware(['auth'])->group(function() {
-    Route::view('/', 'template.home')->name('student');
+    Route::get('/', 'StudentController@index')->name('student');
+    Route::view('/createPage', 'template.create')->name('student.createPage');
+    Route::post('/create', 'StudentController@create')->name('student.create');
 });
