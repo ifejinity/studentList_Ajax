@@ -16,8 +16,7 @@ class UserController extends Controller
             'password' => 'required'
         ]);
         if (Auth::attempt($validated)) {
-            // return redirect()->intended('student')->with(['allStudents' => $allStudent]);\
-            return redirect()->route('student');
+            return redirect()->route('student')->with('success', 'Login success!');
         } else {
             return redirect()->back()->with('error', 'Failed to login');
         }

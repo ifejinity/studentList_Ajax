@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title></title>
+    <title>{{ $title }}</title>
     {{-- cdns --}}
     @include('partials.__cdn')
 </head>
 <body class="w-full min-h-screen bg-gray-100 flex items-center flex-col font-[outfit] md:px-[10%] px-[5%] ">
     {{-- header --}}
-    @if (request()->path() == "student" || request()->path() == "student/createPage")
+    @if (Auth::check())
         <header class="w-full bg-white fixed top-0 px-[5%] py-3 flex justify-between shadow-lg z-[2]">
             <div>
 
@@ -29,7 +29,7 @@
     {{-- toastify js --}}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     {{-- custom js --}}
-    <script src="{{ asset('js/student.js') }}"></script>
+    @yield('js')
     {{-- alert response --}}
     @if (session('error'))
         <script>

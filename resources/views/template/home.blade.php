@@ -25,9 +25,10 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($myArray as $student)
+            <tbody class="list">
+                @foreach ($allStudents as $student)
                     <tr>
+                        {{-- <td>{{ $student['created_at']->diffForHumans() }}</td> --}}
                         <td>{{ $student['student_type'] }}</td>
                         <td>{{ $student['id_number'] }}</td>
                         <td>{{ $student['name'] }}</td>
@@ -39,15 +40,66 @@
                         <td>{{ $student['email'] }}</td>
                         <td>
                             <div class="flex gap-2">
-                                <a href="http://" class="btn bi bi-pencil-square bg-blue-500 hover:bg-blue-400 text-white text-[18px]"></a>
-                                <a href="http://" id="delete" class="btn bi bi-trash bg-red-500 hover:bg-red-400 text-white text-[18px]"></a>
+                                <a href="{{ route('student.editPage', $student['id_number']) }}" class="btn bi bi-pencil-square bg-blue-500 hover:bg-blue-400 text-white text-[18px] edit"></a>
+                                <a href="{{ route('student.delete', $student['id_number']) }}" class="btn bi bi-trash bg-red-500 hover:bg-red-400 text-white text-[18px] delete"></a>
                             </div>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+        @if (count($allStudents) <= 0)
+            <div class="w-full flex justify-center mt-10">
+                <p class="text-center text-[50px] font-[700] text-blue-300">No record</p>
+            </div>
+        @endif
     </div>
     {{-- add student button --}}
-    <a href="{{ route('student.createPage') }}" class="btn bg-blue-500 hover:bg-blue-400 text-white absolute bottom-[24px] right-[24px]">Add Student</a>
+    <a href="{{ route('student.createPage') }}" class="btn bg-blue-500 hover:bg-blue-400 text-white absolute bottom-[24px] right-[24px] shadow-md border-none">Add Student</a>
+@endsection
+
+@section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // logout
+            const logoutLink = document.getElementById('logout');
+            logoutLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You will be logged out.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, log me out!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = logoutLink.href;
+                    }
+                });
+            });
+            // delete
+            const deleteBtn = document.querySelector('.list');
+            deleteBtn.addEventListener('click', (event)=>{
+                event.preventDefault();
+                if(event.target.classList.contains('delete')) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Data will be deleted.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, continue!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = event.target.href;
+                        }
+                    });
+                } else if(event.target.classList.contains('edit')) {
+                    window.location.href = event.target.href;
+                }
+            });
+        });
+    </script>
 @endsection

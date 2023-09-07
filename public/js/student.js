@@ -17,4 +17,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+    // delete
+    const deleteBtn = document.querySelector('.list');
+    deleteBtn.addEventListener('click', (event)=>{
+        event.preventDefault();
+        if(event.target.classList.contains('delete')) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Data will be deleted.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, continue!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = event.target.href;
+                }
+            });
+        } else if(event.target.classList.contains('edit')) {
+            window.location.href = event.target.href;
+        }
+    });
 });
