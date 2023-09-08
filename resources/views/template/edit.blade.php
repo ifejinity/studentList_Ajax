@@ -9,7 +9,7 @@
         </ul>
     </div>
     {{-- add student form --}}
-    <form class="w-full bg-white shadow-md p-5 rounded-lg flex flex-col gap-3 mt-5 max-w-[700px]" action="{{ route('student.edit') }}" method="POST">
+    <form class="w-full bg-white shadow-md p-5 rounded-lg flex flex-col gap-3 mt-5 max-w-[700px]" action="{{ route('student.edit',$toEditStudent['id_number']) }}" method="POST">
         @csrf
         <h1 class="text-[30px] font-[700] text-blue-500 mb-1">Edit student</h1>
         <div class="flex flex-wrap gap-1">
@@ -104,7 +104,6 @@
                 <input type="text" name="email" value="{{ $toEditStudent['email'] }}" class="input bg-gray-200">
             </div>
         </div>
-        <input type="hidden" name="toEditStudentNumber" value="{{ $toEditStudent['id_number'] }}">
         <button type="submit" class="btn bg-blue-500 hover:bg-blue-400 text-white self-end mt-3 w-full max-w-[200px]">Update</button>
     </form>
 @endsection

@@ -14,33 +14,33 @@ use Illuminate\Validation\Rule;
 class StudentController extends Controller
 {
     // input validation 
-    public function inputValidation($request) {
+    public function inputValidation($request, $number_id) {
         $validated = Validator::make($request->all(), [
             'student_type' => 'required|in:local,foreign',
             'id_number' => Route::currentRouteName() == "student.create" ?
             'required|between:1,99999|numeric|unique:local_students,id_number|unique:foreign_students,id_number' : 
             [
                 'required', 'between:1,99999', 'numeric',
-                Rule::unique('local_students', 'id_number')->ignore($request->toEditStudentNumber, 'id_number'),
-                Rule::unique('foreign_students', 'id_number')->ignore($request->toEditStudentNumber, 'id_number')
+                Rule::unique('local_students', 'id_number')->ignore($number_id, 'id_number'),
+                Rule::unique('foreign_students', 'id_number')->ignore($number_id, 'id_number')
             ],
             'mobile_number' => [
                 'required', 'min:11', 'max:11',
                 Rule::unique('local_students', 'mobile_number')
                     ->where('name', $request->name)
-                    ->ignore($request->toEditStudentNumber, 'id_number'),
+                    ->ignore($number_id, 'id_number'),
                 Rule::unique('foreign_students', 'mobile_number')
                     ->where('name', $request->name)
-                    ->ignore($request->toEditStudentNumber, 'id_number'),
+                    ->ignore($number_id, 'id_number'),
             ],
             'name' => [
                 'required','min:6',
                 Rule::unique('local_students', 'name')
                     ->where('mobile_number', $request->mobile_number)
-                    ->ignore($request->toEditStudentNumber, 'id_number'),
+                    ->ignore($number_id, 'id_number'),
                 Rule::unique('foreign_students', 'name')
                     ->where('mobile_number', $request->mobile_number)
-                    ->ignore($request->toEditStudentNumber, 'id_number'),
+                    ->ignore($number_id, 'id_number'),
             ],
             'age' => 'required|integer|between:1,99',
             'gender' => 'required|in:male,female',
@@ -87,7 +87,7 @@ class StudentController extends Controller
     // create new student
     public function create(Request $request) {
         // validate inputs
-        $validated = $this->inputValidation($request);
+        $validated = $this->inputValidation($request, $request->id_number);
         // if validator ?
         if($validated->fails()) {
             //if true
@@ -121,17 +121,18 @@ class StudentController extends Controller
         }
     }
     // edit process
-    public function edit(Request $request) {
-        $validated = $this->inputValidation($request);
+    public function edit(Request $request, $old_number_id) {
+        // validate
+        $validated = $this->inputValidation($request, $old_number_id);
         // if validator fails
         if($validated->fails()) {
             //if true
             return redirect()->back()->withErrors($validated)->withInput()->with('error', 'Failed to edit student!');
         } else {
             // ready data for creation of local or foreign student
-            $createStudent = Arr::except($request->all(), ['toEditStudentNumber']);
+            $createStudent = $request->all();
             $typeCheck = ($request->student_type == "local");
-            LocalStudent::where('id_number', $request->toEditStudentNumber)->delete() == 1 ? : ForeignStudent::where('id_number', $request->toEditStudentNumber)->delete();
+            LocalStudent::where('id_number', $old_number_id)->delete() == 1 ? : ForeignStudent::where('id_number', $old_number_id)->delete();
             $typeCheck ? $student = LocalStudent::create($createStudent) : $student = ForeignStudent::create($createStudent);
             // ready data for creation of records in all student table
             $createAllStudent = [
