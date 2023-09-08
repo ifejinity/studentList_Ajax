@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\AllStudent;
 use App\ForeignStudent;
 use App\LocalStudent;
+use Facade\Ignition\QueryRecorder\Query;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -19,24 +22,43 @@ class StudentController extends Controller
             'id_number' => Route::currentRouteName() == "student.create" ?
             'required|between:1,99999|numeric|unique:local_students,id_number|unique:foreign_students,id_number' : 
             [
-                'required',
-                'between:1,99999', 
-                'numeric',
+                'required', 'between:1,99999', 'numeric',
                 Rule::unique('local_students', 'id_number')->ignore($request->toEditStudentNumber, 'id_number'),
                 Rule::unique('foreign_students', 'id_number')->ignore($request->toEditStudentNumber, 'id_number')
             ],
-            'name' => Route::currentRouteName() == "student.create" ? 
-            'required|min:6|unique:local_students,name|unique:foreign_students,name' :
-            [
+            'mobile_number' => [
                 'required',
-                'min:6', 
-                Rule::unique('local_students', 'name')->ignore($request->toEditStudentName, 'name'),
-                Rule::unique('foreign_students', 'name')->ignore($request->toEditStudentName, 'name')
+                'min:11',
+                'max:11',
+                Rule::unique('local_students', 'mobile_number')
+                    ->where(function ($query) use ($request) {
+                        $query->where('name', $request->name);
+                    })
+                    ->ignore($request->toEditStudentNumber, 'id_number'),
+                Rule::unique('foreign_students', 'mobile_number')
+                    ->where(function ($query) use ($request) {
+                        $query->where('name', $request->name);
+                    })
+                    ->ignore($request->toEditStudentNumber, 'id_number'),
             ],
+            'name' => [
+                'required',
+                'min:6',
+                Rule::unique('local_students', 'name')
+                    ->where(function ($query) use ($request) {
+                        $query->where('mobile_number', $request->mobile_number);
+                    })
+                    ->ignore($request->toEditStudentNumber, 'id_number'),
+                Rule::unique('foreign_students', 'name')
+                    ->where(function ($query) use ($request) {
+                        $query->where('mobile_number', $request->mobile_number);
+                    })
+                    ->ignore($request->toEditStudentNumber, 'id_number'),
+            ],
+            
             'age' => 'required|integer|between:1,99',
             'gender' => 'required|in:male,female',
             'city' => 'required',
-            'mobile_number' => 'required|min:11|max:11',
             'grades' => 'required|numeric|between:0,100',
             'email' => 'required|email'
         ]);
@@ -102,17 +124,7 @@ class StudentController extends Controller
             return redirect()->back()->withErrors($validated)->withInput()->with('error', 'Failed to edit student!');
         } else {
             // ready data for creation of local or foreign student
-            $createStudent = [
-                'student_type' => $request->student_type,
-                'id_number' => $request->id_number,
-                'name' => $request->name,
-                'age' => $request->age,
-                'gender' => $request->gender,
-                'city' => $request->city,
-                'mobile_number' => $request->mobile_number,
-                'grades' => $request->grades,
-                'email' => $request->email
-            ];
+            $createStudent = Arr::except($request->all(), ['toEditStudentNumber', 'toEditStudentName']);
             $typeCheck = ($request->student_type == "local");
             LocalStudent::where('id_number', $request->toEditStudentNumber)->delete() == 1 ? : ForeignStudent::where('id_number', $request->toEditStudentNumber)->delete();
             $typeCheck ? $student = LocalStudent::create($createStudent) : $student = ForeignStudent::create($createStudent);
