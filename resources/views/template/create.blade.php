@@ -9,7 +9,7 @@
         </ul>
     </div>
     {{-- add student form --}}
-    <form class="w-full bg-white shadow-md p-5 rounded-lg flex flex-col gap-3 mt-5 max-w-[700px]" action="{{ route('student.create') }}" method="POST">
+    <form class="w-full bg-white shadow-md p-5 rounded-lg flex flex-col gap-3 mt-5 max-w-[700px]" action="{{ route('student.create') }}" method="POST" id="createForm">
         @csrf
         <h1 class="text-[30px] font-[700] text-blue-500 mb-1">Add student</h1>
         <div class="flex flex-wrap gap-1">
@@ -106,4 +106,28 @@
         </div>
         <button type="submit" class="btn bg-blue-500 hover:bg-blue-400 text-white self-end mt-3 w-full max-w-[200px]">Save</button>
     </form>
+@endsection
+
+@section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // save edit
+            const updateForm = document.querySelector("#createForm");
+            updateForm.addEventListener('submit', (event)=> {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You're about to create student",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, proceed!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        event.target.submit();
+                    }
+                });
+            })
+        });
+    </script>
 @endsection
