@@ -27,30 +27,21 @@ class StudentController extends Controller
             'mobile_number' => [
                 'required', 'min:11', 'max:11',
                 Rule::unique('local_students', 'mobile_number')
-                    ->where(function ($query) use ($request) {
-                        $query->where('name', $request->name);
-                    })
+                    ->where('name', $request->name)
                     ->ignore($request->toEditStudentNumber, 'id_number'),
                 Rule::unique('foreign_students', 'mobile_number')
-                    ->where(function ($query) use ($request) {
-                        $query->where('name', $request->name);
-                    })
+                    ->where('name', $request->name)
                     ->ignore($request->toEditStudentNumber, 'id_number'),
             ],
             'name' => [
                 'required','min:6',
                 Rule::unique('local_students', 'name')
-                    ->where(function ($query) use ($request) {
-                        $query->where('mobile_number', $request->mobile_number);
-                    })
+                    ->where('mobile_number', $request->mobile_number)
                     ->ignore($request->toEditStudentNumber, 'id_number'),
                 Rule::unique('foreign_students', 'name')
-                    ->where(function ($query) use ($request) {
-                        $query->where('mobile_number', $request->mobile_number);
-                    })
+                    ->where('mobile_number', $request->mobile_number)
                     ->ignore($request->toEditStudentNumber, 'id_number'),
             ],
-            
             'age' => 'required|integer|between:1,99',
             'gender' => 'required|in:male,female',
             'city' => 'required',
