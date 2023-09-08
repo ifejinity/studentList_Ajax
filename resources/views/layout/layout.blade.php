@@ -30,6 +30,27 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     {{-- custom js --}}
     @yield('js')
+    @if (Auth::check())
+        <script>
+            // logout
+            const logoutLink = document.getElementById('logout');
+                logoutLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You will be logged out.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, log me out!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = logoutLink.href;
+                        }
+                    });
+                });
+        </script>
+    @endif
     {{-- alert response --}}
     @if (session('error'))
         <script>
