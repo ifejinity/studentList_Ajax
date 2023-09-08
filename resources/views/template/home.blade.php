@@ -80,7 +80,6 @@
             const logoutLink = document.getElementById('logout');
             logoutLink.addEventListener('click', function (e) {
                 e.preventDefault();
-                
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'You will be logged out.',
