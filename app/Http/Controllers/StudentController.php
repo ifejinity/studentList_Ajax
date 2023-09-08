@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\AllStudent;
 use App\ForeignStudent;
 use App\LocalStudent;
-use Facade\Ignition\QueryRecorder\Query;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -27,9 +25,7 @@ class StudentController extends Controller
                 Rule::unique('foreign_students', 'id_number')->ignore($request->toEditStudentNumber, 'id_number')
             ],
             'mobile_number' => [
-                'required',
-                'min:11',
-                'max:11',
+                'required', 'min:11', 'max:11',
                 Rule::unique('local_students', 'mobile_number')
                     ->where(function ($query) use ($request) {
                         $query->where('name', $request->name);
@@ -42,8 +38,7 @@ class StudentController extends Controller
                     ->ignore($request->toEditStudentNumber, 'id_number'),
             ],
             'name' => [
-                'required',
-                'min:6',
+                'required','min:6',
                 Rule::unique('local_students', 'name')
                     ->where(function ($query) use ($request) {
                         $query->where('mobile_number', $request->mobile_number);
@@ -61,10 +56,28 @@ class StudentController extends Controller
             'city' => 'required',
             'grades' => 'required|numeric|between:0,100',
             'email' => 'required|email'
+        ], 
+        // custom message
+        [
+            'name.unique' => 'The name and number is already registered!',
+            'mobile_number.unique' => '',
         ]);
         return $validated;
     }
-    // list student
+    // list filter
+    public function filter($studentType) {
+        if($studentType == null) {
+            $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->get();
+        } else {
+            $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->where('student_type', $studentType)->get();
+        }
+        $myArray = [];
+        foreach($allStudents as $student) {
+            $myArray[] = $student['foreignstudent'] ?? $student['localstudent'];
+        }
+        return $myArray;
+    }
+    // list filter
     public function getStudent() {
         $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->get();
         $myArray = [];
@@ -74,10 +87,11 @@ class StudentController extends Controller
         return $myArray;
     }
     // index
-    public function index() {
+    public function index(Request $request) {
         $title = "Student list";
-        $allStudents = $this->getStudent();
-        return view('template.home', compact('allStudents', 'title'));
+        $studentType = $request->studentType;
+        $allStudents = $this->filter($studentType);
+        return view('template.home', compact('allStudents', 'title', 'studentType'));
     }
     // create new student
     public function create(Request $request) {
@@ -124,7 +138,7 @@ class StudentController extends Controller
             return redirect()->back()->withErrors($validated)->withInput()->with('error', 'Failed to edit student!');
         } else {
             // ready data for creation of local or foreign student
-            $createStudent = Arr::except($request->all(), ['toEditStudentNumber', 'toEditStudentName']);
+            $createStudent = Arr::except($request->all(), ['toEditStudentNumber']);
             $typeCheck = ($request->student_type == "local");
             LocalStudent::where('id_number', $request->toEditStudentNumber)->delete() == 1 ? : ForeignStudent::where('id_number', $request->toEditStudentNumber)->delete();
             $typeCheck ? $student = LocalStudent::create($createStudent) : $student = ForeignStudent::create($createStudent);

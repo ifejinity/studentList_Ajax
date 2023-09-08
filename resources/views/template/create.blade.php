@@ -9,14 +9,25 @@
         </ul>
     </div>
     {{-- add student form --}}
-    <form class="w-full bg-white shadow-md p-5 rounded-lg flex flex-col gap-3 mt-5" action="{{ route('student.create') }}" method="POST">
+    <form class="w-full bg-white shadow-md p-5 rounded-lg flex flex-col gap-3 mt-5 max-w-[700px]" action="{{ route('student.create') }}" method="POST">
         @csrf
         <h1 class="text-[30px] font-[700] text-blue-500 mb-1">Add student</h1>
+        <div class="flex flex-wrap gap-1">
+            @error('student_type')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+            @error('id_number')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+            @error('name')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+            @error('age')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+            @error('gender')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+            @error('city')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+            @error('mobile_number')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+            @error('grades')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+            @error('email')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror
+        </div>
         <div class="w-full flex md:flex-row flex-col gap-3">
             {{-- student type --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">Student type @error('student_type')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">Student type</span>
                 </label>
                 <select name="student_type" class="select bg-gray-200">
                     <option value="" disabled {{ old('student_type') == null ? "selected" : '' }}>Select</option>
@@ -27,7 +38,7 @@
             {{-- id number --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">ID number @error('id_number')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">ID number</span>
                 </label>
                 <input type="number" name="id_number" value="{{ old('id_number') }}" class="input bg-gray-200">
             </div>
@@ -36,14 +47,14 @@
             {{-- name --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">Name @error('name')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">Name</span>
                 </label>
                 <input type="text" name="name" value="{{ old('name') }}" class="input bg-gray-200">
             </div>
             {{-- age --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">Age @error('age')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">Age</span>
                 </label>
                 <input type="number" name="age" value="{{ old('age') }}" class="input bg-gray-200">
             </div>
@@ -52,7 +63,7 @@
             {{-- gender --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">Gender @error('gender')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">Gender</span>
                 </label>
                 <select name="gender" class="select bg-gray-200">
                     <option disabled {{ old('gender') == null ? "selected" : '' }}>Select</option>
@@ -63,7 +74,7 @@
             {{-- city --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">City @error('city')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">City</span>
                 </label>
                 <input type="text" name="city" value="{{ old('city') }}" class="input bg-gray-200">
             </div>
@@ -72,14 +83,14 @@
             {{-- mobile number --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">Mobile number @error('mobile_number')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">Mobile number</span>
                 </label>
                 <input type="number" name="mobile_number" value="{{ old('mobile_number') }}" class="input bg-gray-200">
             </div>
             {{-- grades --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">Grades @error('grades')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">Grades</span>
                 </label>
                 <input type="text" name="grades" value="{{ old('grades') }}" class="input bg-gray-200">
             </div>
@@ -88,7 +99,7 @@
             {{-- email --}}
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">Email @error('email')<span class="text-[14px] text-red-500 ml-1 badge badge-error text-white">{{ $message }}</span>@enderror</span>
+                    <span class="label-text">Email</span>
                 </label>
                 <input type="text" name="email" value="{{ old('email') }}" class="input bg-gray-200">
             </div>

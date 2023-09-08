@@ -8,8 +8,23 @@
             <li></li>
         </ul>
     </div>
+    <div class="flex gap-5 w-full">
+        <form action="{{ route('student') }}" class="form-control w-full max-w-[400px] flex flex-row gap-3">
+            <div class="w-full">
+                <label class="label">
+                    <span class="label-text">Filter by type</span>
+                </label>
+                <select name="studentType" class="select select-bordered w-full">
+                    <option value=""  {{ $studentType == null ? 'selected' : '' }}>All</option>
+                    <option value="foreign" {{ $studentType == 'foreign' ? 'selected' : '' }}>Foreign</option>
+                    <option value="local" {{  $studentType == 'local' ? 'selected' : ''  }}>Local</option>
+                </select>
+            </div>
+            <button type="submit" class="btn self-end bg-blue-500 hover:bg-blue-400 text-white">Submit</button>
+        </form>
+    </div>
     {{-- table --}}
-    <div class="overflow-x-auto bg-white mt-5 w-full p-5">
+    <div class="overflow-x-auto bg-white mt-5 w-full p-5 min-h-[70vh]">
         <table class="table">
             <thead class="bg-blue-500 text-white">
                 <tr>
@@ -27,7 +42,7 @@
             </thead>
             <tbody class="list">
                 @foreach ($allStudents as $student)
-                    <tr>
+                    <tr class="hover:bg-blue-50">
                         {{-- <td>{{ $student['created_at']->diffForHumans() }}</td> --}}
                         <td>{{ $student['student_type'] }}</td>
                         <td>{{ $student['id_number'] }}</td>
@@ -55,7 +70,7 @@
         @endif
     </div>
     {{-- add student button --}}
-    <a href="{{ route('student.createPage') }}" class="btn bg-blue-500 hover:bg-blue-400 text-white absolute bottom-[24px] right-[24px] shadow-md border-none">Add Student</a>
+    <a href="{{ route('student.createPage') }}" class="btn bg-blue-500 hover:bg-blue-400 text-white fixed bottom-[24px] right-[24px] shadow-md border-none">Add Student</a>
 @endsection
 
 @section('js')
