@@ -1,0 +1,16 @@
+.pagination {
+    display: flex;
+}
+.page-item {
+
+}
+.page-link {
+    height: 100%;
+    width: 100%;
+    padding: 15px;
+}
+.active {
+    background-color: #3b82f6;
+    border-radius: 5px;
+    color: white;
+}

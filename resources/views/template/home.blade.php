@@ -1,5 +1,9 @@
 @extends('layout.layout')
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
+@endsection
+
 @section('body')
     {{-- bread crumbs --}}
     <div class="text-sm breadcrumbs mt-[100px] w-full">
@@ -10,7 +14,6 @@
     </div>
     <div class="flex gap-5 w-full">
         <form action="{{ route('student') }}" class="form-control w-full max-w-[400px] flex flex-row gap-3">
-            @csrf
             <div class="w-full">
                 <label class="label">
                     <span class="label-text">Filter by type</span>
@@ -25,50 +28,52 @@
         </form>
     </div>
     {{-- table --}}
-    <div class="overflow-x-auto bg-white mt-5 w-full p-5 min-h-[70vh]">
-        <table class="table">
-            <thead class="bg-blue-500 text-white">
-                <tr>
-                    <th>Student type</th>
-                    <th>ID number</th>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Gender</th>
-                    <th>City</th>
-                    <th>Mobile number</th>
-                    <th>Grades</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody class="list">
-                @foreach ($allStudents as $student)
-                    <tr class="hover:bg-blue-50">
-                        {{-- <td>{{ $student['created_at']->diffForHumans() }}</td> --}}
-                        <td>{{ $student['student_type'] }}</td>
-                        <td>{{ $student['id_number'] }}</td>
-                        <td>{{ $student['name'] }}</td>
-                        <td>{{ $student['age'] }}</td>
-                        <td>{{ $student['gender'] }}</td>
-                        <td>{{ $student['city'] }}</td>
-                        <td>{{ $student['mobile_number'] }}</td>
-                        <td>{{ number_format($student['grades'], 2) }}</td>
-                        <td>{{ $student['email'] }}</td>
-                        <td>
-                            <div class="flex gap-2">
-                                <a href="{{ route('student.editPage', $student['id_number']) }}" class="btn bi bi-pencil-square bg-blue-500 hover:bg-blue-400 text-white text-[18px] edit"></a>
-                                <a href="{{ route('student.delete', $student['id_number']) }}" class="btn bi bi-trash bg-red-500 hover:bg-red-400 text-white text-[18px] delete"></a>
-                            </div>
-                        </td>
+    <div class="bg-white mt-5 w-full p-5 flex flex-col justify-between mb-3">
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead class="bg-blue-500 text-white">
+                    <tr>
+                        <th>Student type</th>
+                        <th>ID number</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>City</th>
+                        <th>Mobile number</th>
+                        <th>Grades</th>
+                        <th>Email</th>
+                        <th>Actions</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-        @if (count($allStudents) <= 0)
-            <div class="w-full flex justify-center mt-10">
-                <p class="text-center text-[50px] font-[700] text-blue-300">No record</p>
-            </div>
-        @endif
+                </thead>
+                <tbody class="list">
+                    @foreach ($paginatedStudents as $student)
+                        <tr class="hover:bg-blue-50">
+                            <td>{{ $student['student_type'] }}</td>
+                            <td>{{ $student['id_number'] }}</td>
+                            <td>{{ $student['name'] }}</td>
+                            <td>{{ $student['age'] }}</td>
+                            <td>{{ $student['gender'] }}</td>
+                            <td>{{ $student['city'] }}</td>
+                            <td>{{ $student['mobile_number'] }}</td>
+                            <td>{{ number_format($student['grades'], 2) }}</td>
+                            <td>{{ $student['email'] }}</td>
+                            <td>
+                                <div class="flex gap-2">
+                                    <a href="{{ route('student.editPage', $student['id_number']) }}" class="btn bi bi-pencil-square bg-blue-500 hover:bg-blue-400 text-white text-[18px] edit"></a>
+                                    <a href="{{ route('student.delete', $student['id_number']) }}" class="btn bi bi-trash bg-red-500 hover:bg-red-400 text-white text-[18px] delete"></a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @if (count($paginatedStudents) <= 0)
+                <div class="w-full flex justify-center mt-10">
+                    <p class="text-center text-[50px] font-[700] text-blue-300">No record</p>
+                </div>
+            @endif
+        </div>
+        {{ $paginatedStudents->links() }}
     </div>
     {{-- add student button --}}
     <a href="{{ route('student.createPage') }}" class="btn bg-blue-500 hover:bg-blue-400 text-white fixed bottom-[24px] right-[24px] shadow-md border-none">Add Student</a>

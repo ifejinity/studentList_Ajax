@@ -6,6 +6,7 @@ use App\AllStudent;
 use App\ForeignStudent;
 use App\LocalStudent;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -80,8 +81,14 @@ class StudentController extends Controller
     public function index(Request $request) {
         $title = "Student list";
         $studentType = $request->studentType;
-        $allStudents = $this->filter($studentType);
-        return view('template.home', compact('allStudents', 'title', 'studentType'));
+        $allStudents = $this->filter($studentType); 
+        // Paginate the array
+        $perPage = 10; // Number of items per page
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = array_slice($allStudents, ($currentPage - 1) * $perPage, $perPage);
+        $paginatedStudents = new LengthAwarePaginator($currentItems, count($allStudents), $perPage, $currentPage);
+        $paginatedStudents->setPath($request->fullUrl());
+        return view('template.home', compact('paginatedStudents', 'title', 'studentType'));
     }
     // create new student
     public function create(Request $request) {

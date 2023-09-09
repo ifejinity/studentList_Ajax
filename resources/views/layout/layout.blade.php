@@ -7,6 +7,8 @@
     <title>{{ $title }}</title>
     {{-- cdns --}}
     @include('partials.__cdn')
+    {{-- custom css --}}
+    @yield('css')
 </head>
 <body class="w-full min-h-screen bg-gray-100 flex items-center flex-col font-[outfit] md:px-[10%] px-[5%] ">
     {{-- header --}}
