@@ -1,9 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\AllStudent;
-use App\LocalStudent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

@@ -6,7 +6,6 @@ use App\AllStudent;
 use App\ForeignStudent;
 use App\LocalStudent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -16,9 +15,7 @@ class StudentController extends Controller
     public function inputValidation($request, $number_id) {
         $validated = Validator::make($request->all(), [
             'student_type' => 'required|in:local,foreign',
-            'id_number' => Route::currentRouteName() == "student.create" ?
-            'required|between:1,99999|numeric|unique:local_students,id_number|unique:foreign_students,id_number' : 
-            [
+            'id_number' => [
                 'required', 'between:1,99999', 'numeric',
                 Rule::unique('local_students', 'id_number')->ignore($number_id, 'id_number'),
                 Rule::unique('foreign_students', 'id_number')->ignore($number_id, 'id_number')
