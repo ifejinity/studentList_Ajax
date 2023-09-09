@@ -67,7 +67,7 @@ class StudentController extends Controller
         }
         return $myArray;
     }
-    // list filter
+    // list all student
     public function getStudent() {
         $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->get();
         $myArray = [];
@@ -120,9 +120,9 @@ class StudentController extends Controller
         }
     }
     // edit process
-    public function edit(Request $request, $old_number_id) {
+    public function edit(Request $request, $oldNumberId) {
         // validate
-        $validated = $this->inputValidation($request, $old_number_id);
+        $validated = $this->inputValidation($request, $oldNumberId);
         // if validator fails
         if($validated->fails()) {
             //if true
@@ -131,7 +131,7 @@ class StudentController extends Controller
             // ready data for creation of local or foreign student
             $createStudent = $request->all();
             $typeCheck = ($request->student_type == "local");
-            LocalStudent::where('id_number', $old_number_id)->delete() == 1 ? : ForeignStudent::where('id_number', $old_number_id)->delete();
+            LocalStudent::where('id_number', $oldNumberId)->delete() == 1 ? : ForeignStudent::where('id_number', $oldNumberId)->delete();
             $typeCheck ? $student = LocalStudent::create($createStudent) : $student = ForeignStudent::create($createStudent);
             // ready data for creation of records in all student table
             $createAllStudent = [
