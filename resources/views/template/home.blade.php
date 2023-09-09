@@ -10,6 +10,7 @@
     </div>
     <div class="flex gap-5 w-full">
         <form action="{{ route('student') }}" class="form-control w-full max-w-[400px] flex flex-row gap-3">
+            @csrf
             <div class="w-full">
                 <label class="label">
                     <span class="label-text">Filter by type</span>
