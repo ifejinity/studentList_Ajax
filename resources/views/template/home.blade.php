@@ -29,7 +29,7 @@
     </div>
     {{-- table --}}
     <div class="bg-white mt-5 w-full p-5 flex flex-col justify-between mb-3">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto" id="table-container">
             <table class="table">
                 <thead class="bg-blue-500 text-white">
                     <tr>
@@ -102,6 +102,26 @@
                 } else if(event.target.classList.contains('edit')) {
                     window.location.href = event.target.href;
                 }
+            });
+            //enable scrolling with drag
+            const tableContainer = document.querySelector('#table-container');
+            let isDragging = false;
+            let startScrollLeft = 0;
+            let startX = 0;
+            tableContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startScrollLeft = tableContainer.scrollLeft;
+                tableContainer.style.cursor = 'grabbing';
+            });
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                tableContainer.scrollLeft = startScrollLeft - dx;
+            });
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                tableContainer.style.cursor = 'grab';
             });
         });
     </script>

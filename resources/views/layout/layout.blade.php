@@ -10,7 +10,7 @@
     {{-- custom css --}}
     @yield('css')
 </head>
-<body class="w-full min-h-screen bg-gray-100 flex items-center flex-col font-[outfit] md:px-[10%] px-[5%] ">
+<body class="w-full min-h-screen bg-gray-100 flex items-center flex-col font-[outfit] md:px-[10%] px-[5%] select-none">
     {{-- header --}}
     @if (Auth::check())
         <header class="w-full bg-white fixed top-0 px-[5%] py-3 flex justify-between shadow-lg z-[2]">
