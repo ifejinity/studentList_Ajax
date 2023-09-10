@@ -18,7 +18,7 @@ class StudentController extends Controller
         $validated = Validator::make($request->all(), [
             'student_type' => 'required|in:local,foreign',
             'id_number' => Route::currentRouteName() == "student.create" ?
-            'required|between:1,99999|numeric|unique:local_students,id_number|unique:foreign_students,id_number' : 
+            'required|between:1,99999|numeric|unique:local_students,id_number|unique:foreign_students,id_number': 
             [
                 'required', 'between:1,99999', 'numeric',
                 Rule::unique('local_students', 'id_number')->ignore($numberId, 'id_number'),
