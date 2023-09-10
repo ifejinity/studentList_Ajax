@@ -14,33 +14,33 @@ use Illuminate\Validation\Rule;
 class StudentController extends Controller
 {
     // input validation 
-    public function inputValidation($request, $number_id) {
+    public function inputValidation($request, $numberId) {
         $validated = Validator::make($request->all(), [
             'student_type' => 'required|in:local,foreign',
             'id_number' => Route::currentRouteName() == "student.create" ?
             'required|between:1,99999|numeric|unique:local_students,id_number|unique:foreign_students,id_number' : 
             [
                 'required', 'between:1,99999', 'numeric',
-                Rule::unique('local_students', 'id_number')->ignore($number_id, 'id_number'),
-                Rule::unique('foreign_students', 'id_number')->ignore($number_id, 'id_number')
+                Rule::unique('local_students', 'id_number')->ignore($numberId, 'id_number'),
+                Rule::unique('foreign_students', 'id_number')->ignore($numberId, 'id_number')
             ],
             'mobile_number' => [
                 'required', 'min:11', 'max:11', 'regex:#(09|\+639|\+63|0)[0-9]{9}#',
                 Rule::unique('local_students', 'mobile_number')
                     ->where('name', $request->name)
-                    ->ignore($number_id, 'id_number'),
+                    ->ignore($numberId, 'id_number'),
                 Rule::unique('foreign_students', 'mobile_number')
                     ->where('name', $request->name)
-                    ->ignore($number_id, 'id_number'),
+                    ->ignore($numberId, 'id_number'),
             ],
             'name' => [
                 'required','min:6',
                 Rule::unique('local_students', 'name')
                     ->where('mobile_number', $request->mobile_number)
-                    ->ignore($number_id, 'id_number'),
+                    ->ignore($numberId, 'id_number'),
                 Rule::unique('foreign_students', 'name')
                     ->where('mobile_number', $request->mobile_number)
-                    ->ignore($number_id, 'id_number'),
+                    ->ignore($numberId, 'id_number'),
             ],
             'age' => 'required|integer|between:1,99',
             'gender' => 'required|in:male,female',
@@ -111,12 +111,12 @@ class StudentController extends Controller
         }
     }
     //get edit student
-    public function editPage($id_number) {
+    public function editPage($numberId) {
         $title = "Student edit";
         $allStudents = $this->getStudent();
         $toEditStudent = "";
         foreach($allStudents as $student) {
-            if($id_number == $student->id_number) {
+            if($numberId == $student->id_number) {
                 $toEditStudent = $student;
             }
         }
@@ -150,11 +150,11 @@ class StudentController extends Controller
         }
     }
     // delete
-    public function delete($id_number) {
+    public function delete($numberId) {
         $allStudents = $this->getStudent();
         $toDeleteStudent = "";
         foreach($allStudents as $student) {
-            if($id_number == $student->id_number) {
+            if($numberId == $student->id_number) {
                 $toDeleteStudent = $student;
             }
         }
