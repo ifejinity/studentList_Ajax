@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
 class StudentController extends Controller
 {
     // input validation 
-    public function inputValidation($request, $numberId) {
+    public function inputValidation($request, $numberId = null) {
         $validated = Validator::make($request->all(), [
             'student_type' => 'required|in:local,foreign',
             'id_number' => [
@@ -53,7 +53,7 @@ class StudentController extends Controller
         return $validated;
     }
     // list filter
-    public function filter($studentType) {
+    public function filter($studentType = null) {
         $myArray = [];
         if($studentType == null) {
             $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->orderBy('created_at', 'desc')->get();
@@ -90,14 +90,14 @@ class StudentController extends Controller
     // create new student
     public function create(Request $request) {
         // validate inputs
-        $validated = $this->inputValidation($request, null);
+        $validated = $this->inputValidation($request);
         // if validator ?
         if($validated->fails()) {
             //if true
             return redirect()->back()->withErrors($validated)->withInput()->with('error', 'Failed to add student!');
         } else {
             // if false
-            $typeCheck = ($request->input('student_type') == "local");
+            $typeCheck = ($request->student_type == "local");
             $student = $typeCheck ? LocalStudent::create($request->all()) : ForeignStudent::create($request->all());
             $createAllStudent = [
                 $typeCheck ? 'local_student_id' : 'foreign_student_id' => $student['id'],
