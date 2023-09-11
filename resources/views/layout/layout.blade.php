@@ -15,7 +15,7 @@
     @if (Auth::check())
         <header class="w-full bg-white fixed top-0 px-[5%] py-3 flex justify-between shadow-lg z-[2] items-center">
             <div>
-                <h1 class="text-blue-500 text-[20px] font-[600]">Student List</h1>
+                <a href="{{ route('student') }}" class="text-blue-500 text-[20px] font-[600]">Student List</a>
             </div>
             <div>
                 <a href="{{ route('logout.process') }}" class="btn bg-blue-500 hover:bg-blue-400 text-white" id="logout">Sign out</a>

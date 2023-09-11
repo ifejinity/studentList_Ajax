@@ -93,7 +93,7 @@ class StudentController extends Controller
     // create new student
     public function create(Request $request) {
         // validate inputs
-        $validated = $this->inputValidation($request, $request->id_number);
+        $validated = $this->inputValidation($request, null);
         // if validator ?
         if($validated->fails()) {
             //if true
