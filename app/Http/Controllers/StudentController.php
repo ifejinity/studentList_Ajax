@@ -83,7 +83,7 @@ class StudentController extends Controller
         $studentType = $request->studentType;
         $allStudents = $this->filter($studentType); 
         // Paginate the array
-        $perPage = 3; // Number of items per page
+        $perPage = 6; // Number of items per page
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $currentItems = array_slice($allStudents, ($currentPage - 1) * $perPage, $perPage);
         $paginatedStudents = new LengthAwarePaginator($currentItems, count($allStudents), $perPage, $currentPage);
