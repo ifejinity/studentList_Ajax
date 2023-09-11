@@ -73,7 +73,7 @@
                 </div>
             @endif
         </div>
-        {{ $paginatedStudents->links() }}
+        {{-- {{ $paginatedStudents->links() }} --}}
     </div>
     {{-- add student button --}}
     <a href="{{ route('student.createPage') }}" class="btn bg-blue-500 hover:bg-blue-400 text-white fixed bottom-[24px] right-[24px] shadow-md border-none">Add Student</a>

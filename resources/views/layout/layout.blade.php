@@ -9,6 +9,8 @@
     @include('partials.__cdn')
     {{-- custom css --}}
     @yield('css')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </head>
 <body class="w-full min-h-screen bg-gray-100 flex items-center flex-col font-[outfit] md:px-[10%] px-[5%] select-none">
     {{-- header --}}
@@ -76,5 +78,9 @@
             }).showToast();
         </script>
     @endif
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        let table = new DataTable('.table');
+    </script>
 </body>
 </html>

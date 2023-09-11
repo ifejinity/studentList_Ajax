@@ -78,13 +78,13 @@ class StudentController extends Controller
     public function index(Request $request) {
         $title = "Student list";
         $studentType = $request->studentType;
-        $allStudents = $this->filter($studentType); 
+        $paginatedStudents = $this->filter($studentType); 
         // Paginate the array
-        $perPage = 6; // Number of items per page
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentItems = array_slice($allStudents, ($currentPage - 1) * $perPage, $perPage);
-        $paginatedStudents = new LengthAwarePaginator($currentItems, count($allStudents), $perPage, $currentPage);
-        $paginatedStudents->setPath($request->Url()."?studentType=".$studentType);
+        // $perPage = 6; // Number of items per page
+        // $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        // $currentItems = array_slice($allStudents, ($currentPage - 1) * $perPage, $perPage);
+        // $paginatedStudents = new LengthAwarePaginator($currentItems, count($allStudents), $perPage, $currentPage);
+        // $paginatedStudents->setPath($request->Url()."?studentType=".$studentType);
         return view('template.home', compact('paginatedStudents', 'title', 'studentType'));
     }
     // create new student
