@@ -24,7 +24,7 @@
                     <option value="local" {{  $studentType == 'local' ? 'selected' : ''  }}>Local</option>
                 </select>
             </div>
-            <button type="submit" class="btn self-end bg-blue-500 hover:bg-blue-400 text-white">Submit</button>
+            <button type="submit" class="btn self-end bg-blue-500 hover:bg-blue-400 text-white">Filter</button>
         </form>
     </div>
     {{-- table --}}
@@ -67,7 +67,7 @@
                     @endforeach
                 </tbody>
             </table>
-            @if (count($paginatedStudents) <= 0)
+            @if (count($paginatedStudents) == 0)
                 <div class="w-full flex justify-center mt-10">
                     <p class="text-center text-[50px] font-[700] text-blue-300">No record</p>
                 </div>
