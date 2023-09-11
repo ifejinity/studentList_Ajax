@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AllStudent extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function localStudent() {
         return $this->belongsTo(LocalStudent::class, 'local_student_id');

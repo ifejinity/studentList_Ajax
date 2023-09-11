@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ForeignStudent extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
     
     public function foreign() {
         return $this->hasOne(AllStudent::class, 'foreign_student_id');
