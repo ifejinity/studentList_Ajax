@@ -56,9 +56,9 @@ class StudentController extends Controller
     public function filter($studentType) {
         $myArray = [];
         if($studentType == null) {
-            $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->orderBy('id', 'desc')->get();
+            $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->orderBy('created_at', 'desc')->get();
         } else {
-            $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->where('student_type', $studentType)->orderBy('id', 'desc')->get();
+            $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->where('student_type', $studentType)->orderBy('created_at', 'desc')->get();
         }
         foreach($allStudents as $student) {
             $myArray[] = $student['foreignstudent'] ?? $student['localstudent'];
