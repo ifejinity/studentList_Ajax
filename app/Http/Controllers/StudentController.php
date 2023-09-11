@@ -60,14 +60,11 @@ class StudentController extends Controller
         $myArray = [];
         if($studentType == null) {
             $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->get();
-            foreach($allStudents as $student) {
-                $myArray[] = $student['foreignstudent'] ?? $student['localstudent'];
-            }
         } else {
             $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->where('student_type', $studentType)->get();
-            foreach($allStudents as $student) {
-                $myArray[] = $studentType == 'local' ? $student['localstudent'] : $student['foreignstudent'];
-            }
+        }
+        foreach($allStudents as $student) {
+            $myArray[] = $student['foreignstudent'] ?? $student['localstudent'];
         }
         return $myArray;
     }

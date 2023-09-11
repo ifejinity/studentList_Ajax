@@ -12,7 +12,8 @@ class UserController extends Controller
             'email' => 'required',
             'password' => 'required'
         ]);
-        if (Auth::attempt($validated)) {
+        $remember = $request->rememberMe ? true : false;
+        if (Auth::attempt($validated, $remember)) {
             return redirect()->intended('student')->with('success', 'Login success!');
         } else {
             return redirect()->back()->with('error', 'Failed to login');

@@ -12,6 +12,12 @@
         @error('password')
             <span class="text-red-500 text-[14px] text-red-500 mt-1">{{ $message }}</span>
         @enderror
+        <div class="form-control w-fit mt-1">
+            <label class="label cursor-pointer flex gap-2">
+                <span class="label-text">Remember me</span> 
+                <input name="rememberMe" type="checkbox" class="checkbox checkbox-sm" />
+            </label>
+        </div>
         <button type="submit" class="btn w-full max-w-[200px] self-end bg-blue-500 hover:bg-blue-400 text-white mt-3">Sign in</button>
     </form>
 @endsection
