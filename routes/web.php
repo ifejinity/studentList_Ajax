@@ -25,7 +25,7 @@ Route::prefix('/student')->middleware(['auth'])->group(function() {
     Route::get('/', 'StudentController@index')->name('student');
     Route::view('/createPage', 'template.create', ['title'=>'Add Student'])->name('student.createPage');
     Route::post('/create', 'StudentController@create')->name('student.create');
-    Route::get('/editPage/{id_number}', 'StudentController@editPage')->name('student.editPage');
-    Route::post('/edit/{old_number_id}', 'StudentController@edit')->name('student.edit');
-    Route::get('/delete/{id_number}', 'StudentController@delete')->name('student.delete');
+    Route::post('/editPage', 'StudentController@editPage')->name('student.editPage');
+    Route::post('/edit', 'StudentController@edit')->name('student.edit');
+    Route::post('/delete', 'StudentController@delete')->name('student.delete');
 });

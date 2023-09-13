@@ -9,8 +9,6 @@
     @include('partials.__cdn')
     {{-- custom css --}}
     @yield('css')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </head>
 <body class="w-full min-h-screen bg-gray-100 flex items-center flex-col font-[outfit] md:px-[10%] px-[5%] select-none">
     {{-- header --}}
@@ -28,10 +26,6 @@
     {{-- body --}}
     @yield('body')
 
-    {{-- sweetalert --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    {{-- toastify js --}}
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     {{-- custom js --}}
     @yield('js')
     @if (Auth::check())
@@ -55,32 +49,49 @@
                 });
         </script>
     @endif
-    {{-- alert response --}}
-    @if (session('error'))
-        <script>
+    <script>
+        function ajax(method, url, data, errorCallback, successCallback) {
+            $.ajax({
+                type: method,
+                url: url,
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                beforeSend: function() {
+                    
+                },
+                success: function (response) {
+                    console.log(response);
+                    if(response.status == 200) {
+                        successCallback(response);
+                    } else {
+                        errorCallback(response);
+                    }
+                }, 
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        function success(message) {
             Toastify({
-                text: "{{ session('error') }}",
+                text: message,
+                className: "info",
+                style: {
+                    background: "#22c55e",
+                }
+            }).showToast();
+        }
+        function error(message) {
+            Toastify({
+                text: message,
                 className: "info",
                 style: {
                     background: "#ef4444",
                 }
             }).showToast();
-        </script>
-    @endif
-    @if (session('success'))
-        <script>
-            Toastify({
-                text: "{{ session('success') }}",
-                className: "info",
-                style: {
-                    background: "#22c55e",  
-                }
-            }).showToast();
-        </script>
-    @endif
-    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script>
-        let table = new DataTable('.table');
+        }
     </script>
 </body>
 </html>

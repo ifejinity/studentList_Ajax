@@ -6,7 +6,6 @@ use App\AllStudent;
 use App\ForeignStudent;
 use App\LocalStudent;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -77,15 +76,11 @@ class StudentController extends Controller
     // index
     public function index(Request $request) {
         $title = "Student list";
-        $studentType = $request->studentType;
-        $paginatedStudents = $this->filter($studentType); 
-        // Paginate the array
-        // $perPage = 6; // Number of items per page
-        // $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        // $currentItems = array_slice($allStudents, ($currentPage - 1) * $perPage, $perPage);
-        // $paginatedStudents = new LengthAwarePaginator($currentItems, count($allStudents), $perPage, $currentPage);
-        // $paginatedStudents->setPath($request->Url()."?studentType=".$studentType);
-        return view('template.home', compact('paginatedStudents', 'title', 'studentType'));
+        $data = $this->filter(); 
+        if($request->ajax()) {
+            return datatables()->of($data)->make(true);
+        }  
+        return view('template.home', compact( 'title'));
     }
     // create new student
     public function create(Request $request) {
@@ -94,7 +89,7 @@ class StudentController extends Controller
         // if validator ?
         if($validated->fails()) {
             //if true
-            return redirect()->back()->withErrors($validated)->withInput()->with('error', 'Failed to add student!');
+            return response()->json(['status'=>500, 'message'=>'Invalid inputs.', 'errors'=>$validated->errors()]);
         } else {
             // if false
             $typeCheck = ($request->student_type == "local");
@@ -104,38 +99,37 @@ class StudentController extends Controller
                 'student_type' => $student['student_type']
             ];
             AllStudent::create($createAllStudent);
-            return redirect()->route('student')->with('success', "Successfully added a student!");
+            return response()->json(['status'=>200, 'message'=>'Added success.']);
         }
     }
     //get edit student
-    public function editPage($numberId) {
-        $title = "Student edit";
+    public function editPage(Request $request) {
         $allStudents = $this->getStudent();
         $toEditStudent = "";
         foreach($allStudents as $student) {
-            if($numberId == $student->id_number) {
+            if($student->id_number == $request->id_number) {
                 $toEditStudent = $student;
             }
         }
         if ($toEditStudent != null) {
-            return view('template.edit', compact('title', 'toEditStudent'));
+            return response()->json(['status' => 200, 'data' => $toEditStudent]);
         } else {
             return redirect('404');
         }
     }
     // edit process
-    public function edit(Request $request, $oldNumberId) {
+    public function edit(Request $request) {
         // validate
-        $validated = $this->inputValidation($request, $oldNumberId);
+        $validated = $this->inputValidation($request, $request->old_id_number);
         // if validator fails
         if($validated->fails()) {
             //if true
-            return redirect()->back()->withErrors($validated)->withInput()->with('error', 'Failed to edit student!');
+            return response()->json(['status'=>500, 'message'=>'Invalid inputs.', 'errors'=>$validated->errors()]);
         } else {
             // ready data for creation of local or foreign student
             $createStudent = $request->all();
             $typeCheck = ($request->student_type == "local");
-            LocalStudent::where('id_number', $oldNumberId)->delete() == 1 ? : ForeignStudent::where('id_number', $oldNumberId)->delete();
+            LocalStudent::where('id_number', $request->old_id_number)->delete() == 1 ? : ForeignStudent::where('id_number', $request->old_id_number)->delete();
             $typeCheck ? $student = LocalStudent::create($createStudent) : $student = ForeignStudent::create($createStudent);
             // ready data for creation of records in all student table
             $createAllStudent = [
@@ -143,22 +137,23 @@ class StudentController extends Controller
                 'student_type' => $student['student_type']
             ];
             AllStudent::create($createAllStudent);
-            return redirect()->route('student')->with('success', 'Edit saved!');
+            return response()->json(['status'=>200, 'message'=>'Update success.']);
         }
     }
     // delete
-    public function delete($numberId) {
+    public function delete(Request $request) {
         $allStudents = $this->getStudent();
         $toDeleteStudent = "";
         foreach($allStudents as $student) {
-            if($numberId == $student->id_number) {
+            if($student->number_id == $request->number_id) {
                 $toDeleteStudent = $student;
+                break;
             }
         }
         if ($toDeleteStudent != null) {
             $toDeleteStudent->student_type == "local" ?  LocalStudent::where('id_number', $toDeleteStudent->id_number)->delete() 
             : ForeignStudent::where('id_number', $toDeleteStudent->id_number)->delete();
-            return redirect()->route('student')->with('success', 'Student delete success!');
+            return response()->json(['status'=>200, 'message' => 'Delete success.']);
         } else {
             return redirect('404');
         }

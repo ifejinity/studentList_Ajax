@@ -3,20 +3,26 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     // log in process
     public function loginProcess(Request $request) {
-        $validated = $request->validate([
-            'email' => 'required',
+        $validated = Validator::make($request->all(),[
+            'email' => 'required|email',
             'password' => 'required'
         ]);
         $remember = $request->rememberMe ? true : false;
-        if (Auth::attempt($validated, $remember)) {
-            return redirect()->intended('student')->with('success', 'Login success!');
+        if($validated->fails()){
+            return response()->json(['status'=>500, 'message'=>'Failed to login', 'errors' => $validated->errors()]);
         } else {
-            return redirect()->back()->with('error', 'Failed to login');
+            $credentials = ['email'=>$request->email, 'password' => $request->password];
+            if (Auth::attempt($credentials, $remember)) {
+                return response()->json(['status'=>200, 'message'=>'Login success']);
+            } else {
+                return response()->json(['status'=> 500, 'message'=>'Failed to login']);
+            }
         }
     }
     // logout
