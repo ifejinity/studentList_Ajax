@@ -31,7 +31,7 @@
     </div> --}}
 
     {{-- table --}}
-    <div class="bg-white mt-5 w-full p-5 flex flex-col justify-between mb-3">
+    <div class="bg-white mt-5 w-full p-5 flex flex-col justify-between mb-3" id="tableContainer">
         <div id="table-container">
             <table class="studentTable display row-border table" style="width: 100%">
                 <thead class="bg-blue-500 text-white">
@@ -172,11 +172,24 @@
             var table = $('.studentTable').DataTable({
                 scrollX: true,
                 processing: true,
-                dom: 'Qlfrtip',
+                dom: 'BQlfrtip',
                 // serverSide: true,
-                select: 'multi',
+                select: {
+                    style:    'multi',
+                    selector: 'td:not(:last-child)'
+                },
+                searchBuilder: {
+                    columns: [0,1,2,3,4,5,6,7,8]
+                },  
                 ajax: "{{ route('student') }}",
                 method: "GET",
+                columnDefs:
+                [
+                    {
+                        targets: 7,
+                        render: $.fn.dataTable.render.number(',', '.', 2, '')
+                    }
+                ],
                 columns: [
                     { data: 'id_number'},
                     { data: 'student_type'},
@@ -199,7 +212,7 @@
                     },
                 ]
             });
-            
+
             // multidelete
             $('#deleteSelected').on('click', function() {
                 let selectedIds = [];
@@ -262,7 +275,8 @@
                             ajax(method, url, data, errorEvent, successEvent);
                         }
                     });
-                } else if(event.target.classList.contains('edit')) {
+                } 
+                else if(event.target.classList.contains('edit')) {
                     modalReset();
                     $('#modal button').attr('id', 'update');
                     $("#modalTitle").html('Edit student');
@@ -332,14 +346,14 @@
                                 $('#modal #errorGender').html(response.errors.gender);
                                 $('#modal #errorCity').html(response.errors.city);
                                 $('#modal #errorMobileNumber').html(response.errors.mobile_number);
-                                $('#modal #errorMobileGrades').html(response.errors.grades);
+                                $('#modal #errorGrades').html(response.errors.grades);
                                 $('#modal #errorEmail').html(response.errors.email);
                             }
                             ajax(method, url, data, errorEvent, successEvent);
                         }
                     });
                 }
-                if(event.target.id == 'update') {
+                else if(event.target.id == 'update') {
                     Swal.fire({
                         title: 'Are you sure?',
                         text: "You're about to update student",
@@ -378,7 +392,7 @@
                                 $('#modal #errorGender').html(response.errors.gender);
                                 $('#modal #errorCity').html(response.errors.city);
                                 $('#modal #errorMobileNumber').html(response.errors.mobile_number);
-                                $('#modal #errorMobileGrades').html(response.errors.grades);
+                                $('#modal #errorGrades').html(response.errors.grades);
                                 $('#modal #errorEmail').html(response.errors.email);
                             }
                             ajax(method, url, data, errorEvent, successEvent);

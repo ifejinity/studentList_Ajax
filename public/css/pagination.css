@@ -24,6 +24,19 @@ div.dtsb-searchBuilder div.dtsb-titleRow div.dtsb-title {
     visibility: hidden;
 }
 
-div.dtsb-searchBuilder button.dtsb-button {
-    
+div.dt-buttons {
+    float: right;
+}
+
+div.dtsb-searchBuilder div.dtsb-titleRow button.dtsb-clearAll {
+    float: none;
+    margin-bottom: 0;
+}
+
+div.dtsb-searchBuilder div.dtsb-group div.dtsb-criteria div.dtsb-buttonContainer {
+    margin-left: 0;
+}
+
+div.dtsb-searchBuilder div.dtsb-group div.dtsb-criteria div.dtsb-inputCont {
+    flex: none;
 }
