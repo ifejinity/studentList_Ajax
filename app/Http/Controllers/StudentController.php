@@ -6,6 +6,7 @@ use App\AllStudent;
 use App\ForeignStudent;
 use App\LocalStudent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -51,6 +52,7 @@ class StudentController extends Controller
         ]);
         return $validated;
     }
+    
     // list filter
     public function filter($studentType = null) {
         $myArray = [];
@@ -64,6 +66,7 @@ class StudentController extends Controller
         }
         return $myArray;
     }
+
     // list all student
     public function getStudent() {
         $allStudents = AllStudent::with(['localstudent', 'foreignstudent'])->get();
@@ -73,6 +76,7 @@ class StudentController extends Controller
         }
         return $myArray;
     }
+
     // index
     public function index(Request $request) {
         $title = "Student list";
@@ -82,6 +86,7 @@ class StudentController extends Controller
         }  
         return view('template.home', compact( 'title'));
     }
+
     // create new student
     public function create(Request $request) {
         // validate inputs
@@ -102,6 +107,7 @@ class StudentController extends Controller
             return response()->json(['status'=>200, 'message'=>'Added success.']);
         }
     }
+
     //get edit student
     public function editPage(Request $request) {
         $allStudents = $this->getStudent();
@@ -117,6 +123,7 @@ class StudentController extends Controller
             return redirect('404');
         }
     }
+
     // edit process
     public function edit(Request $request) {
         // validate
@@ -140,7 +147,8 @@ class StudentController extends Controller
             return response()->json(['status'=>200, 'message'=>'Update success.']);
         }
     }
-    // delete
+
+    // single delete
     public function delete(Request $request) {
         $allStudents = $this->getStudent();
         $toDeleteStudent = "";
@@ -157,5 +165,15 @@ class StudentController extends Controller
         } else {
             return redirect('404');
         }
+    }
+
+    // multiple delete
+    public function multiDelete(Request $request) {
+            $ids = $request->id;
+            DB::table('local_students')
+                ->whereIn('id_number', $ids)
+                ->union(DB::table('foreign_students')->whereIn('id_number', $ids))
+                ->delete();
+            return response()->json(['status' => 200, 'message' => 'Delete success.']);
     }
 }

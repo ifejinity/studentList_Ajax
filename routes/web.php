@@ -28,4 +28,5 @@ Route::prefix('/student')->middleware(['auth'])->group(function() {
     Route::post('/editPage', 'StudentController@editPage')->name('student.editPage');
     Route::post('/edit', 'StudentController@edit')->name('student.edit');
     Route::post('/delete', 'StudentController@delete')->name('student.delete');
+    Route::post('/multiDelete', 'StudentController@multiDelete')->name('student.multiDelete');
 });
