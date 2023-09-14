@@ -52,7 +52,7 @@ class StudentController extends Controller
         ]);
         return $validated;
     }
-    
+
     // list filter
     public function filter($studentType = null) {
         $myArray = [];
@@ -169,11 +169,15 @@ class StudentController extends Controller
 
     // multiple delete
     public function multiDelete(Request $request) {
+        try {
             $ids = $request->id;
             DB::table('local_students')
                 ->whereIn('id_number', $ids)
                 ->union(DB::table('foreign_students')->whereIn('id_number', $ids))
                 ->delete();
-            return response()->json(['status' => 200, 'message' => 'Delete success.']);
+                return response()->json(['status' => 200, 'message' => 'Delete success.']);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

@@ -32,10 +32,8 @@
 
     {{-- table --}}
     <div class="bg-white mt-5 w-full p-5 flex flex-col justify-between mb-3">
-        <button id="deleteSelected" class="btn btn-error">Delete Selected</button>
-
         <div id="table-container">
-            <table class="studentTable rounded-none display" style="width: 100%">
+            <table class="studentTable display row-border table" style="width: 100%">
                 <thead class="bg-blue-500 text-white">
                     <tr>
                         <th>ID number</th>
@@ -55,12 +53,13 @@
                 </tbody>
             </table>
         </div>
+        <button id="deleteSelected" class="btn btn-error w-fit">Delete Selected</button>
     </div>
 
     {{-- add student button --}}
     <button id="showModalAdd" class="btn bg-blue-500 hover:bg-blue-400 text-white fixed bottom-[24px] right-[24px] shadow-md border-none">Add Student</button>
 
-    {{-- modal add --}}
+    {{-- modal --}}
     <div class="fixed top-0 bg-black/30 hidden justify-center items-center z-[2] w-full h-screen overflow-y-scroll" id="modal">
         <div class="flex flex-col w-full max-w-[800px] bg-white p-5 rounded-lg md:my-0 my-20">
             <div class="flex justify-between items-center">

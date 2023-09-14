@@ -1,18 +1,29 @@
-nav {
-    margin-top: 20px;
-}
-
-.pagination {
-    display: flex;
-}
-
-.page-link {
-    height: 100%;
-    width: 100%;
-    padding: 15px;
-}
-.active {
-    background-color: #3b82f6;
+.dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 2px solid #ccc;
     border-radius: 5px;
-    color: white;
+    font-size: 16px;
+    color: #555;
+    outline: none;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus, .dataTables_wrapper .dataTables_length select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+div.dtsb-searchBuilder div.dtsb-titleRow div.dtsb-title:after {
+    position: absolute;
+    left: 0;
+    visibility: visible;
+    content: 'Filter';
+}
+
+div.dtsb-searchBuilder div.dtsb-titleRow div.dtsb-title {
+    visibility: hidden;
+}
+
+div.dtsb-searchBuilder button.dtsb-button {
+    
 }
