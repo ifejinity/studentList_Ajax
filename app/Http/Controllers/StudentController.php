@@ -139,9 +139,8 @@ class StudentController extends Controller
         $allStudents = $this->getStudent();
         $toDeleteStudent = null;
         foreach($allStudents as $student) {
-            if($student->number_id == $request->number_id) {
+            if($student->id_number == $request->id_number) {
                 $toDeleteStudent = $student;
-                break;
             }
         }
         if ($toDeleteStudent != null) {
