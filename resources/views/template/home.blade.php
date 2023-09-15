@@ -13,23 +13,6 @@
         </ul>
     </div>
 
-    {{-- filter --}}
-    {{-- <div class="flex gap-5 w-full">
-        <form action="{{ route('student') }}" class="form-control w-full max-w-[400px] flex flex-row gap-3">
-            <div class="w-full">
-                <label class="label">
-                    <span class="label-text">Filter by type</span>
-                </label>
-                <select name="studentType" class="select select-bordered w-full">
-                    <option value="">All</option>
-                    <option value="foreign">Foreign</option>
-                    <option value="local">Local</option>
-                </select>
-            </div>
-            <button type="submit" class="btn self-end bg-blue-500 hover:bg-blue-400 text-white">Filter</button>
-        </form>
-    </div> --}}
-
     {{-- table --}}
     <div class="bg-white mt-5 w-full p-5 flex flex-col justify-between mb-3" id="tableContainer">
         <div id="table-container">
@@ -288,9 +271,9 @@
                     // confirmed callback
                     function confirmedCallback(isConfirmed) {
                         if (isConfirmed) {
-                            method = "POST";
-                            url = "{{ route('student.delete') }}";
-                            data = {id_number:event.target.value};
+                            let method = "POST";
+                            let url = "{{ route('student.delete') }}";
+                            let data = {id_number:event.target.value};
                             function successEvent(response) {
                                 // toast success
                                 success(response.message)
@@ -307,14 +290,15 @@
                     // call confirmation function
                     confirmation(title, text, icon, showCancelButton = true, confirmButtonText, cancelButtonText, confirmedCallback);
                 }
+
                 // get student for edit
-                else if(event.target.classList.contains('edit')) {
+                else if(event.target.classList.contains('edit')) {let 
                     modalReset();
                     $('#modal button').attr('id', 'update');
                     $("#modalTitle").html('Edit student');
-                    method = "POST";
-                    url = "{{ route('student.editPage') }}";
-                    data = {id_number:event.target.value};
+                    let method = "POST";
+                    let url = "{{ route('student.editPage') }}";
+                    let data = {id_number:event.target.value};
                     function successEvent(response) {
                         // set input value 
                         $('#modal select[name=student_type]').val(response.data.student_type);
@@ -353,9 +337,9 @@
                     function confirmedCallback(isConfirmed) {
                         if (isConfirmed) {
                             let formData = $('#form').serialize();
-                            method = "POST";
-                            url = "{{ route('student.create') }}";
-                            data = formData;
+                            let method = "POST";
+                            let url = "{{ route('student.create') }}";
+                            let data = formData;
                             function successEvent(response) {
                                 // reset error messages
                                 $("#modal span").html("");
@@ -389,6 +373,7 @@
                     // call confirmation function
                     confirmation(title, text, icon, showCancelButton = true, confirmButtonText, cancelButtonText, confirmedCallback);
                 }
+                
                 // update
                 else if(event.target.id == 'update') {
                     // confirm
@@ -402,9 +387,9 @@
                         if (isConfirmed) {
                             let formData = $('#form').serialize();
                             formData += '&old_id_number=' + event.target.value;
-                            method = "POST";
-                            url = "{{ route('student.edit') }}";
-                            data = formData;
+                            let method = "POST";
+                            let url = "{{ route('student.edit') }}";
+                            let data = formData;
                             function successEvent(response) {
                                 // reset error messages
                                 $("editForm span").html("");
