@@ -153,21 +153,28 @@
         $(document).ready(function () {
             // reset modal
             function modalReset() {
+                // reset modal button id and value
                 $('#modal button').attr('id', '').val("");
+                // clear error messages
                 $("#modal span").html("");
+                // clear inputs value
                 $("#modal input, #modal select").val("");
             }
             // show modal
             $("#showModalAdd").click(function() {
                 modalReset();
+                // set modal title
                 $("#modalTitle").html('Add student');
+                // set modal button id
                 $('#modal button').attr('id', 'save');
+                // show modal
                 $('#modal').addClass('flex').removeClass('hidden');
             });
 
             // hide modal
             $("#hideModal").click(function() {
                 modalReset();
+                // hide modal
                 $('#modal').addClass('hidden').removeClass('flex');
             });
 
@@ -219,7 +226,7 @@
 
             // multidelete
             $('#deleteSelected').on('click', function() {
-                // confirm
+                // prepare value for confirmation function
                 let title = 'Are you sure?';
                 let text = 'Data will be deleted.';
                 let icon = 'warning';
@@ -228,7 +235,8 @@
                 let cancelButtonText = 'Cancel';
                 // confirmed callback
                 function confirmedCallback(isConfirmed) {
-                    if (isConfirmed) {
+                    if (isConfirmed) { 
+                        // prepare value for ajax function
                         let selectedIds = [];
                         const selected = document.querySelectorAll('.list .selected .sorting_1');
                         selected.forEach(element => {
@@ -260,7 +268,7 @@
                 event.preventDefault();
                 // delete
                 if(event.target.classList.contains('delete')) {
-                    // confirm
+                    // prepare value for confirmation
                     let title = 'Are you sure?';
                     let text = 'Data will be deleted.';
                     let icon = 'warning';
@@ -270,6 +278,7 @@
                     // confirmed callback
                     function confirmedCallback(isConfirmed) {
                         if (isConfirmed) {
+                            // prepare value for ajax function
                             let method = "POST";
                             let url = "{{ route('student.delete') }}";
                             let data = { id_number:event.target.value };
@@ -293,8 +302,11 @@
                 // get student for edit
                 else if(event.target.classList.contains('edit')) {
                     modalReset();
+                    // set modal button id
                     $('#modal button').attr('id', 'update');
+                    // set modal title
                     $("#modalTitle").html('Edit student');
+                    // prepare value for ajax function
                     let method = "POST";
                     let url = "{{ route('student.editPage') }}";
                     let data = {id_number:event.target.value};
@@ -327,7 +339,7 @@
                 event.preventDefault();
                 // create
                 if(event.target.id == 'save') {
-                    // confirm
+                    // prepare value for confirmation function
                     let title = 'Are you sure?';
                     let text = "You're about to create student.";
                     let icon = 'warning';
@@ -336,6 +348,7 @@
                     // confirmed callback
                     function confirmedCallback(isConfirmed) {
                         if (isConfirmed) {
+                            // prepare value for ajax function
                             let formData = $('#form').serialize();
                             let method = "POST";
                             let url = "{{ route('student.create') }}";
@@ -376,7 +389,7 @@
                 
                 // update
                 else if(event.target.id == 'update') {
-                    // confirm
+                    // prepare value for confirmation function
                     let title = 'Are you sure?';
                     let text = "You're about to update student.";
                     let icon = 'warning';
@@ -385,6 +398,7 @@
                     // confirmed callback
                     function confirmedCallback(isConfirmed) {
                         if (isConfirmed) {
+                            // prepare value for ajax function
                             let formData = $('#form').serialize();
                             formData += '&old_id_number=' + event.target.value;
                             let method = "POST";
