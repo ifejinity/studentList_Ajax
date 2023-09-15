@@ -173,6 +173,10 @@ class StudentController extends Controller
             $ids = $request->id;
             ForeignStudent::whereIn('id_number', $ids)->delete();
             LocalStudent::whereIn('id_number', $ids)->delete();
+            // $localStudents = DB::table('local_students')->select('*');
+            // $foreignStudents = DB::table('foreign_students')->select('*');
+            // $students = $localStudents->union($foreignStudents)->whereIn('id_number', $ids)->get();
+            // $students->delete();
             return response()->json(['status' => 200, 'message' => 'Delete success.']);
         }
     }

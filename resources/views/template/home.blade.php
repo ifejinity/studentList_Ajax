@@ -237,7 +237,7 @@
                     if (isConfirmed) {
                         let method = "POST";
                         let url = "{{ route('student.multiDelete') }}";
-                        let data = { id:selectedIds };
+                        let data = { id:selectedIds};
                         function successEvent(response) {
                             // toast success
                             success(response.message)
@@ -292,7 +292,7 @@
                 }
 
                 // get student for edit
-                else if(event.target.classList.contains('edit')) {let 
+                else if(event.target.classList.contains('edit')) {
                     modalReset();
                     $('#modal button').attr('id', 'update');
                     $("#modalTitle").html('Edit student');
