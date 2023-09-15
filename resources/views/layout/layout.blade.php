@@ -49,6 +49,7 @@
                 });
         </script>
     @endif
+    
     {{-- global js --}}
     <script>
         // confirmation function
