@@ -40,7 +40,7 @@ class StudentController extends Controller
                     ->ignore($numberId, 'id_number'),
             ],
             'age' => 'required|integer|between:1,99',
-            'gender' => 'required|in:male,female',
+            'gender' => 'in:male,female',
             'city' => 'required',
             'grades' => 'required|numeric|between:0,100',
             'email' => 'required|email'
