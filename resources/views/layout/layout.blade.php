@@ -53,7 +53,7 @@
     {{-- global js --}}
     <script>
         // confirmation function
-        function confirmation(title = null, text = null, icon = null, showCancelButton = false, confirmButtonText = null, cancelButtonText = null, confirmedCallback) {
+        function confirmation(title, text, icon, showCancelButton = false, confirmButtonText, cancelButtonText, confirmedCallback) {
             Swal.fire({
                 title: title,
                 text: text,

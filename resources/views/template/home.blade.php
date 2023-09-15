@@ -191,7 +191,7 @@
                 },
                 searchBuilder: {
                     columns: [0,1,2,3,4,5,6,7,8]
-                },  
+                },
                 ajax: "{{ route('student') }}",
                 method: "GET",
                 columnDefs:
@@ -212,6 +212,8 @@
                     { data: 'grades'},
                     { data: 'email'},
                     {
+                        orderable:false,
+                        searchable: false,
                         render: function(data, type, full, meta) {
                             return `
                                 <div class="flex gap-2">
