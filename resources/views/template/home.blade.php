@@ -361,6 +361,7 @@
                                 // toast success
                                 success(response.message)
                                 $('.studentTable').DataTable().ajax.reload();
+                                // hide modal
                                 $('#modal').addClass('hidden').removeClass('flex');
                             }
                             function errorEvent(response) {
