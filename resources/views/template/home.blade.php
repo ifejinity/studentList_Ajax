@@ -151,6 +151,14 @@
 @section('js')
     <script>
         $(document).ready(function () {
+            // reset modal
+            function modalReset() {
+                $('#modal button').attr('id', '');
+                $("#modal span").html("");
+                $("#modal input, #modal select").val("");
+                $("#modal button").val("");
+            }
+            
             // show modal
             $("#showModalAdd").click(function() {
                 modalReset();
@@ -164,14 +172,6 @@
                 modalReset();
                 $('#modal').addClass('hidden').removeClass('flex');
             });
-
-            // reset modal
-            function modalReset() {
-                $('#modal button').attr('id', '');
-                $("#modal span").html("");
-                $("#modal input, #modal select").val("");
-                $("#modal button").val("");
-            }
 
             // data table function
             var table = $('.studentTable').DataTable({
