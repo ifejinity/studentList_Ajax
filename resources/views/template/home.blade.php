@@ -221,11 +221,6 @@
 
             // multidelete
             $('#deleteSelected').on('click', function() {
-                let selectedIds = [];
-                const selected = document.querySelectorAll('.list .selected .sorting_1');
-                selected.forEach(element => {
-                    selectedIds.push(element.innerText);
-                });
                 // confirm
                 let title = 'Are you sure?';
                 let text = 'Data will be deleted.';
@@ -236,6 +231,11 @@
                 // confirmed callback
                 function confirmedCallback(isConfirmed) {
                     if (isConfirmed) {
+                        let selectedIds = [];
+                        const selected = document.querySelectorAll('.list .selected .sorting_1');
+                        selected.forEach(element => {
+                            selectedIds.push(element.innerText);
+                        });
                         let method = "POST";
                         let url = "{{ route('student.multiDelete') }}";
                         let data = { id:selectedIds};
@@ -274,7 +274,7 @@
                         if (isConfirmed) {
                             let method = "POST";
                             let url = "{{ route('student.delete') }}";
-                            let data = {id_number:event.target.value};
+                            let data = { id_number:event.target.value };
                             function successEvent(response) {
                                 // toast success
                                 success(response.message)
