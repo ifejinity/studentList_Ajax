@@ -177,6 +177,7 @@
             var table = $('.studentTable').DataTable({
                 scrollX: true,
                 processing: true,
+                saveState: true,
                 dom: 'BQlfrtip',
                 // serverSide: true,
                 select: {
@@ -317,6 +318,7 @@
                         error(response.message)
                     }
                     ajax(method, url, data, errorEvent, successEvent);
+                    // show modal for edit
                     $('#modal').addClass('flex').removeClass('hidden');
                 }
             });

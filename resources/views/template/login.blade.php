@@ -10,7 +10,7 @@
         <span class="text-red-500 text-[14px] text-red-500 mt-1" id="errorPassword"></span>
         <div class="form-control w-fit mt-1">
             <label class="label cursor-pointer flex gap-2">
-                <span class="label-text">Remember me</span> 
+                <p class="label-text">Remember me</p> 
                 <input name="rememberMe" type="checkbox" class="checkbox checkbox-sm" />
             </label>
         </div>
