@@ -122,7 +122,7 @@ class StudentController extends Controller
             // ready data for creation of local or foreign student
             $createStudent = $request->all();
             $typeCheck = ($request->student_type == "local");
-            $typeCheck ? LocalStudent::where('id_number', $request->old_id_number)->delete() : ForeignStudent::where('id_number', $request->old_id_number)->delete();
+            LocalStudent::where('id_number', $request->old_id_number)->delete() == 1 ? : ForeignStudent::where('id_number', $request->old_id_number)->delete();
             $typeCheck ? $student = LocalStudent::create($createStudent) : $student = ForeignStudent::create($createStudent);
             // ready data for creation of records in all student table
             $createAllStudent = [
@@ -152,11 +152,28 @@ class StudentController extends Controller
 
     // multiple delete
     public function multiDelete(Request $request) {
-        $ids = $request->id;
-        DB::table('local_students')
-            ->whereIn('id_number', $ids)
-            ->union(DB::table('foreign_students')->whereIn('id_number', $ids))
-            ->delete();
+        $validated = Validator::make($request->all(), [
+            'id' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $localCount = DB::table('local_students')->whereIn('id_number', $value)->count();
+                    $foreignCount = DB::table('foreign_students')->whereIn('id_number', $value)->count();
+                    if (($localCount + $foreignCount) !== count($value)) {
+                        $fail("The selected student is invalid.");
+                    }
+                }
+            ]
+        ],
+        [
+            'id.required' => 'No selected.',
+        ]);
+        if($validated->fails()) {
+            return response()->json(['status' => 500, 'message' => $validated->errors()]);
+        } else {
+            $ids = $request->id;
+            ForeignStudent::whereIn('id_number', $ids)->delete();
+            LocalStudent::whereIn('id_number', $ids)->delete();
             return response()->json(['status' => 200, 'message' => 'Delete success.']);
+        }
     }
 }

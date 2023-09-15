@@ -262,7 +262,7 @@
                         }
                         function errorEvent(response) {
                             // toast error
-                            error(response.message)
+                            error(response.message.id)
                         }
                         // call ajax function
                         ajax(method, url, data, errorEvent, successEvent);
