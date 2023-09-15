@@ -137,7 +137,7 @@ class StudentController extends Controller
     // single delete
     public function delete(Request $request) {
         $allStudents = $this->getStudent();
-        $toDeleteStudent = "";
+        $toDeleteStudent = null;
         foreach($allStudents as $student) {
             if($student->number_id == $request->number_id) {
                 $toDeleteStudent = $student;
