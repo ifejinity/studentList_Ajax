@@ -238,7 +238,7 @@
                         });
                         let method = "POST";
                         let url = "{{ route('student.multiDelete') }}";
-                        let data = { id:selectedIds};
+                        let data = { id:selectedIds };
                         function successEvent(response) {
                             // toast success
                             success(response.message)

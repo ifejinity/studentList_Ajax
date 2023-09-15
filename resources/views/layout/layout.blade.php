@@ -49,7 +49,7 @@
                 });
         </script>
     @endif
-    
+
     {{-- global js --}}
     <script>
         // confirmation function
@@ -79,11 +79,13 @@
                 },
                 success: function (response) {
                     console.log(response);
+
                     if(response.status == 200) {
                         successCallback(response);
                     } else {
                         errorCallback(response);
                     }
+                    
                 }, 
                 error: function (error) {
                     console.log(error);
