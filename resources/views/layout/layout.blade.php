@@ -50,6 +50,20 @@
         </script>
     @endif
     <script>
+        // confirmation function
+        function confirmation(title = null, text = null, icon = null, showCancelButton = false, confirmButtonText = null, cancelButtonText = null, confirmedCallback) {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: showCancelButton,
+                confirmButtonText: confirmButtonText,
+                cancelButtonText: cancelButtonText
+            }).then((result) => {
+                confirmedCallback(result.isConfirmed);
+            });
+        }
+        // ajax function
         function ajax(method, url, data, errorCallback, successCallback) {
             $.ajax({
                 type: method,
@@ -74,6 +88,7 @@
                 }
             });
         }
+        // function for success toast
         function success(message) {
             Toastify({
                 text: message,
@@ -83,6 +98,7 @@
                 }
             }).showToast();
         }
+        // function for error toast
         function error(message) {
             Toastify({
                 text: message,

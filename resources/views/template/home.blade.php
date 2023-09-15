@@ -1,7 +1,7 @@
 @extends('layout.layout')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/table.css') }}">
 @endsection
 
 @section('body')
@@ -168,6 +168,28 @@
 @section('js')
     <script>
         $(document).ready(function () {
+            // show modal
+            $("#showModalAdd").click(function() {
+                modalReset();
+                $("#modalTitle").html('Add student');
+                $('#modal button').attr('id', 'save');
+                $('#modal').addClass('flex').removeClass('hidden');
+            });
+
+            // hide modal
+            $("#hideModal").click(function() {
+                modalReset();
+                $('#modal').addClass('hidden').removeClass('flex');
+            });
+
+            // reset modal
+            function modalReset() {
+                $('#modal button').attr('id', '');
+                $("#modal span").html("");
+                $("#modal input, #modal select").val("");
+                $("#modal button").val("");
+            }
+
             // data table function
             var table = $('.studentTable').DataTable({
                 scrollX: true,
@@ -220,46 +242,52 @@
                 selected.forEach(element => {
                     selectedIds.push(element.innerText);
                 });
-                Swal.fire({
-                        title: 'Are you sure?',
-                        text: 'Data will be deleted.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, continue!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            let method = "POST";
-                            let url = "{{ route('student.multiDelete') }}";
-                            let data = {id:selectedIds};
-                            function successEvent(response) {
-                                // toast success
-                                success(response.message)
-                                table.ajax.reload();
-                            }
-                            function errorEvent(response) {
-                                // toast error
-                                error(response.message)
-                            }
-                            ajax(method, url, data, errorEvent, successEvent);
+                // confirm
+                let title = 'Are you sure?';
+                let text = 'Data will be deleted.';
+                let icon = 'warning';
+                let showCancelButton = true;
+                let confirmButtonText = 'Yes, continue!';
+                let cancelButtonText = 'Cancel';
+                // confirmed callback
+                function confirmedCallback(isConfirmed) {
+                    if (isConfirmed) {
+                        let method = "POST";
+                        let url = "{{ route('student.multiDelete') }}";
+                        let data = {id:selectedIds};
+                        function successEvent(response) {
+                            // toast success
+                            success(response.message)
+                            table.ajax.reload();
                         }
-                    });
+                        function errorEvent(response) {
+                            // toast error
+                            error(response.message)
+                        }
+                        // call ajax function
+                        ajax(method, url, data, errorEvent, successEvent);
+                    }
+                }
+                // call confirmation function
+                confirmation(title, text, icon, showCancelButton = true, confirmButtonText, cancelButtonText, confirmedCallback);
             });
 
             // edit and delete process
             const actions = document.querySelector('.list');
             actions.addEventListener('click', (event)=>{
                 event.preventDefault();
+                // delete
                 if(event.target.classList.contains('delete')) {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: 'Data will be deleted.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, continue!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                    // confirm
+                    let title = 'Are you sure?';
+                    let text = 'Data will be deleted.';
+                    let icon = 'warning';
+                    let showCancelButton = true;
+                    let confirmButtonText = 'Yes, continue!';
+                    let cancelButtonText = 'Cancel';
+                    // confirmed callback
+                    function confirmedCallback(isConfirmed) {
+                        if (isConfirmed) {
                             method = "POST";
                             url = "{{ route('student.delete') }}";
                             data = {id_number:event.target.value};
@@ -272,10 +300,14 @@
                                 // toast error
                                 error(response.message)
                             }
+                            // call ajax function
                             ajax(method, url, data, errorEvent, successEvent);
                         }
-                    });
-                } 
+                    }
+                    // call confirmation function
+                    confirmation(title, text, icon, showCancelButton = true, confirmButtonText, cancelButtonText, confirmedCallback);
+                }
+                // get student for edit
                 else if(event.target.classList.contains('edit')) {
                     modalReset();
                     $('#modal button').attr('id', 'update');
@@ -309,16 +341,17 @@
             const form = document.querySelector('#form');
             form.addEventListener('click', (event)=>{
                 event.preventDefault();
+                // create
                 if(event.target.id == 'save') {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You're about to create student",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, proceed!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                    // confirm
+                    let title = 'Are you sure?';
+                    let text = "You're about to create student.";
+                    let icon = 'warning';
+                    let confirmButtonText = 'Yes, continue!';
+                    let cancelButtonText = 'Cancel';
+                    // confirmed callback
+                    function confirmedCallback(isConfirmed) {
+                        if (isConfirmed) {
                             let formData = $('#form').serialize();
                             method = "POST";
                             url = "{{ route('student.create') }}";
@@ -349,20 +382,24 @@
                                 $('#modal #errorGrades').html(response.errors.grades);
                                 $('#modal #errorEmail').html(response.errors.email);
                             }
+                            // call ajax funtion
                             ajax(method, url, data, errorEvent, successEvent);
                         }
-                    });
+                    }
+                    // call confirmation function
+                    confirmation(title, text, icon, showCancelButton = true, confirmButtonText, cancelButtonText, confirmedCallback);
                 }
+                // update
                 else if(event.target.id == 'update') {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You're about to update student",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, proceed!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                    // confirm
+                    let title = 'Are you sure?';
+                    let text = "You're about to update student.";
+                    let icon = 'warning';
+                    let confirmButtonText = 'Yes, continue!';
+                    let cancelButtonText = 'Cancel';
+                    // confirmed callback
+                    function confirmedCallback(isConfirmed) {
+                        if (isConfirmed) {
                             let formData = $('#form').serialize();
                             formData += '&old_id_number=' + event.target.value;
                             method = "POST";
@@ -395,32 +432,14 @@
                                 $('#modal #errorGrades').html(response.errors.grades);
                                 $('#modal #errorEmail').html(response.errors.email);
                             }
+                            // call ajax function
                             ajax(method, url, data, errorEvent, successEvent);
                         }
-                    });
+                    }
+                    // call confirmation function
+                    confirmation(title, text, icon, showCancelButton = true, confirmButtonText, cancelButtonText, confirmedCallback);
                 }
             })
-
-            // show modal
-            $("#showModalAdd").click(function() {
-                modalReset();
-                $("#modalTitle").html('Add student');
-                $('#modal button').attr('id', 'save');
-                $('#modal').addClass('flex').removeClass('hidden');
-            });
-
-            // hide modal
-            $("#hideModal").click(function() {
-                modalReset();
-                $('#modal').addClass('hidden').removeClass('flex');
-            });
-
-            function modalReset() {
-                $('#modal button').attr('id', '');
-                $("#modal span").html("");
-                $("#modal input, #modal select").val("");
-                $("#modal button").val("");
-            }
         });
     </script>
 @endsection
