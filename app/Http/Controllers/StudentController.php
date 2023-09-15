@@ -123,6 +123,7 @@ class StudentController extends Controller
             $createStudent = $request->all();
             $typeCheck = ($request->student_type == "local");
             LocalStudent::where('id_number', $request->old_id_number)->delete() == 1 ? : ForeignStudent::where('id_number', $request->old_id_number)->delete();
+            // DB::table('local_students')->select('*')->union(DB::table('foreign_students')->select('*'))->where('id_number', $request->old_id_number)->delete();
             $typeCheck ? $student = LocalStudent::create($createStudent) : $student = ForeignStudent::create($createStudent);
             // ready data for creation of records in all student table
             $createAllStudent = [
@@ -171,12 +172,10 @@ class StudentController extends Controller
             return response()->json(['status' => 500, 'message' => $validated->errors()]);
         } else {
             $ids = $request->id;
-            ForeignStudent::whereIn('id_number', $ids)->delete();
-            LocalStudent::whereIn('id_number', $ids)->delete();
-            // $localStudents = DB::table('local_students')->select('*');
-            // $foreignStudents = DB::table('foreign_students')->select('*');
-            // $students = $localStudents->union($foreignStudents)->whereIn('id_number', $ids)->get();
-            // $students->delete();
+            $students = DB::table('local_students')->select('*')->union(DB::table('foreign_students')->select('*'))->whereIn('id_number', $ids)->get();
+            foreach($students as $student) {
+                $student->student_type == 'local' ? LocalStudent::where('id_number', $student->id_number)->delete() : ForeignStudent::where('id_number', $student->id_number)->delete();
+            }
             return response()->json(['status' => 200, 'message' => 'Delete success.']);
         }
     }
