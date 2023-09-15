@@ -142,6 +142,7 @@
                         <span class="text-[14px] text-red-500 text-red-500 mt-1" id="errorEmail"></span>
                     </div>
                 </div>
+                <input type="hidden" name="old_student_type">
                 <button type="submit" class="btn bg-blue-500 hover:bg-blue-400 text-white self-end mt-3 w-full max-w-[200px]" id="">Save</button>
             </form>
         </div>
@@ -323,6 +324,7 @@
                         $('#modal input[name=mobile_number]').val(response.data.mobile_number);
                         $('#modal input[name=grades]').val(response.data.grades);
                         $('#modal input[name=email]').val(response.data.email);
+                        $('#modal input[name=old_student_type]').val(response.data.student_type);
                         $('#modal button[type=submit]').val(response.data.id_number);
                     }
                     function errorEvent(response) {

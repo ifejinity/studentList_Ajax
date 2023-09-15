@@ -122,8 +122,7 @@ class StudentController extends Controller
             // ready data for creation of local or foreign student
             $createStudent = $request->all();
             $typeCheck = ($request->student_type == "local");
-            LocalStudent::where('id_number', $request->old_id_number)->delete() == 1 ? : ForeignStudent::where('id_number', $request->old_id_number)->delete();
-            // DB::table('local_students')->select('*')->union(DB::table('foreign_students')->select('*'))->where('id_number', $request->old_id_number)->delete();
+            $request->old_student_type == 'local' ? LocalStudent::where('id_number', $request->old_id_number)->delete() : ForeignStudent::where('id_number', $request->old_id_number)->delete();
             $typeCheck ? $student = LocalStudent::create($createStudent) : $student = ForeignStudent::create($createStudent);
             // ready data for creation of records in all student table
             $createAllStudent = [
