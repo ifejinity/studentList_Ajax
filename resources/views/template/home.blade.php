@@ -153,12 +153,10 @@
         $(document).ready(function () {
             // reset modal
             function modalReset() {
-                $('#modal button').attr('id', '');
+                $('#modal button').attr('id', '').val("");
                 $("#modal span").html("");
                 $("#modal input, #modal select").val("");
-                $("#modal button").val("");
             }
-            
             // show modal
             $("#showModalAdd").click(function() {
                 modalReset();
