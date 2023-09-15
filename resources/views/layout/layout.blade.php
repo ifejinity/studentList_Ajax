@@ -49,6 +49,7 @@
                 });
         </script>
     @endif
+    {{-- global js --}}
     <script>
         // confirmation function
         function confirmation(title = null, text = null, icon = null, showCancelButton = false, confirmButtonText = null, cancelButtonText = null, confirmedCallback) {
