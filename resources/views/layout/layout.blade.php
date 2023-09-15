@@ -81,11 +81,13 @@
                     console.log(response);
 
                     if(response.status == 200) {
+                        // call success callback
                         successCallback(response);
                     } else {
+                        // call error callback
                         errorCallback(response);
                     }
-                    
+
                 }, 
                 error: function (error) {
                     console.log(error);
