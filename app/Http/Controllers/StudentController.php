@@ -145,8 +145,7 @@ class StudentController extends Controller
             }
         }
         if ($toDeleteStudent != null) {
-            $toDeleteStudent->student_type == "local" ?  LocalStudent::where('id_number', $toDeleteStudent->id_number)->delete() 
-            : ForeignStudent::where('id_number', $toDeleteStudent->id_number)->delete();
+            $toDeleteStudent->student_type == "local" ?  LocalStudent::where('id_number', $toDeleteStudent->id_number)->delete() : ForeignStudent::where('id_number', $toDeleteStudent->id_number)->delete();
             return response()->json(['status'=>200, 'message' => 'Delete success.']);
         }
     }
